@@ -1,0 +1,11 @@
+{
+  "name": "elegant",
+  "version": "1.0.0",
+  "description": "myself linke jQuery project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "allenAugustine",
+  "license": "ISC"
+}
