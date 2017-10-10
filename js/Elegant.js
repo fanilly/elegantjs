@@ -1,14 +1,21 @@
 /**
  * Project name:Elegant
  * Author:JiJunfeng
- * Version:2.0
+ * Version:2.1
  * Create Date:2017-7-21
  * description:
- * 将1.0版本进行改造 把1.0中elems数组中的内容全部遍历出来
- * 绑定到对象本身身上 键值就是数组中的下标 
- * 之后的每次操作都是对对象本身的操作
+ * 遵循amd规范的2.0
  */
-(function(win) {
+
+!(function(elegant, window) {
+  /**
+   * 模仿jQuery实现的demo 遵循AMD规范
+   */
+  if (typeof define === 'function' && define.amd)
+    define(elegant);
+  else
+    window.elegant = elegant();
+})((function(win) {
 
   //对添加原型的方法进行优化
   Function.prototype.addMethods = !Function.addMethods ? function(methods) {
@@ -32,7 +39,6 @@
     this.length = this.len();
   }
 
-  //向_Elegant添加原型的方法 为了模仿模块化编程
   _Elegant.extends = function() {
     for (var item = 0; item < arguments.length; item++) {
       if (toString.call(arguments[item]).indexOf('Object') != -1)
@@ -320,15 +326,15 @@
         if (item.addEventListener) {
           item.addEventListener(type, function(e) {
             //直接传入经过兼容处理的事件对象
-            fn.call(this, e || window.event);
+            fn.call(this, e || win.event);
           }, false);
         } else if (item.attachEvent) {
           item.attachEvent("on" + type, function(e) {
-            fn.call(this, e || window.event);
+            fn.call(this, e || win.event);
           });
         } else {
           item["on" + type] = function(e) {
-            fn.call(this, e || window.event);
+            fn.call(this, e || win.event);
           };
         }
       });
@@ -465,9 +471,9 @@
     /*=========================================  getByClaa  =======================================*/
     find: function(str) {
       /********************************************************************************************
-        *****************************************************************************************
-          **************************************待补充*****************************************
-        *****************************************************************************************
+       *****************************************************************************************
+       **************************************待补充*****************************************
+       *****************************************************************************************
        ********************************************************************************************/
     },
 
@@ -879,42 +885,21 @@
     }
   });
 
-  /*=====================================================================================
-  =                                          外部调用                                   =
-  ======================================================================================*/
-  win.Elegant = function() {
-    return new _Elegant(arguments[0]);
-  };
-
-  /*=====================================================================================
-  =                                           工具类                                    =
-  ======================================================================================*/
-  var elegant = _Elegant.prototype;
-  Elegant.Util = {
-    /*====================================  Array  =====================================*/
-    merge: elegant.merge,
-    minValue: elegant.minValue,
-    maxValue: elegant.maxValue,
-
-    /*===================================  String  ====================================*/
-    trim: elegant.trim,
-
-    /*====================================  AJAX  =====================================*/
-    ajax: function(options) {
-      
+  return function() {
+    function Elegant() {
+      return new _Elegant(arguments[0]);
+    }
+    //全局工具函数
+    Elegant.ajax = function(){
       /********************************************************************************************
        *****************************************************************************************
        **************************************待补充*****************************************
        *****************************************************************************************
        ********************************************************************************************/
-    }
-  };
-
-})(window);
-
-
-
-
+    };
+    return Elegant;
+  }
+})(window), window);
 
 /*===========================================================================================
 =                                           test                                            =
@@ -923,16 +908,16 @@
 // console.log(Elegant('#box').attr('data-flag'));
 // console.log(Elegant('#box').attr('class'));
 // 
-Elegant('#box').addClass('hello', 'world', 'name', 'space');
-Elegant('#box').removeClass('hello');
-console.log(Elegant('.container'));
-Elegant('.container').eq(0).click(function() {
-  Elegant(this).animate({
-    width: 300,
-    height: 300,
-    opacity: 0.6
-  }, 1000);
-});
+// Elegant('#box').addClass('hello', 'world', 'name', 'space');
+// Elegant('#box').removeClass('hello');
+// console.log(Elegant('.container'));
+// Elegant('.container').eq(0).click(function() {
+//   Elegant(this).animate({
+//     width: 300,
+//     height: 300,
+//     opacity: 0.6
+//   }, 1000);
+// });
 /*var box = document.getElementById('box');
 box.className+=' hello';
 box.className+=' world';
